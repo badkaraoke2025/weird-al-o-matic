@@ -157,3 +157,66 @@ function showErrorMessage(messageText) {
 }
 
 init();
+
+
+
+function randomUglyColor() {
+  var uglyColors = [
+    "#ff00ff", "#00ff00", "#ffff00", "#ff9900",
+    "#00ffff", "#ff0000", "#ff66ff", "#00ff99",
+    "#ff0066", "#ccff00"
+  ];
+  var index = Math.floor(Math.random() * uglyColors.length);
+  return uglyColors[index];
+}
+
+window.addEventListener("load", function () {
+  // ===== SPLASH ELEMENTS =====
+  var splash = document.getElementById("splash-screen");
+  var splashText = document.getElementById("splash-text");
+  var startButton = document.getElementById("start-button");
+
+  if (splash && splashText && startButton) {
+    var sx = 50;
+    var sy = 50;
+    var svx = 4;
+    var svy = 3;
+
+    function moveSplashText() {
+      var cRect = splash.getBoundingClientRect();
+      var tRect = splashText.getBoundingClientRect();
+
+      sx += svx;
+      sy += svy;
+
+      if (sx <= 0 || sx + tRect.width >= cRect.width) {
+        svx = -svx;
+        splashText.style.color = randomUglyColor();
+      }
+      if (sy <= 0 || sy + tRect.height >= cRect.height) {
+        svy = -svy;
+        splashText.style.color = randomUglyColor();
+      }
+
+      splashText.style.left = sx + "px";
+      splashText.style.top = sy + "px";
+    }
+
+    setInterval(moveSplashText, 16);
+    setInterval(function () {
+      splashText.style.color = randomUglyColor();
+    }, 700);
+    splashText.style.color = randomUglyColor();
+
+    // Show main app on START
+    startButton.addEventListener("click", function () {
+      splash.style.display = "none";
+      var mainWrapper = document.getElementById("main-wrapper");
+      if (mainWrapper) {
+        mainWrapper.style.display = "block";
+      }
+    });
+  }
+
+  
+});
