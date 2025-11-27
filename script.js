@@ -1,10 +1,71 @@
+var WIKI_BASE_URL = "https://en.wikipedia.org/api/rest_v1/page/summary/";
+
+var weirdAlTopics = [
+  { id: "Weird_Al_Yankovic", label: "Weird Al Yankovic (person)" },
+  { id: "Dare_to_Be_Stupid", label: "Dare to Be Stupid (album)" },
+  { id: "Amish_Paradise", label: "Amish Paradise (song)" },
+  { id: "Eat_It", label: "Eat It (song)" },
+  { id: "Smells_Like_Nirvana", label: "Smells Like Nirvana (song)" },
+  { id: "Bad_Hair_Day", label: "Bad Hair Day (album)" },
+  { id: "Mandatory_Fun", label: "Mandatory Fun (album)" },
+  { id: "The_Saga_Begins", label: "The Saga Begins (song)" }
+];
+
 var topicSelect = document.getElementById("topic-select");
 var topicForm = document.getElementById("topic-form");
 var randomButton = document.getElementById("random-button");
 var resultSection = document.getElementById("result");
 
 function init() {
-  resultSection.textContent = "Weird-Al-O-Matic is ready.";
+  populateTopicOptions();
+  topicForm.addEventListener("submit", handleFormSubmit);
+  randomButton.addEventListener("click", handleRandomClick);
+  showStatusMessage("Pick a Weird Al topic or click Random to start.");
+}
+
+function populateTopicOptions() {
+  var placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "-- Choose a Weird Al topic --";
+  placeholderOption.disabled = true;
+  placeholderOption.selected = true;
+  topicSelect.appendChild(placeholderOption);
+
+  var i;
+  for (i = 0; i < weirdAlTopics.length; i++) {
+    var topic = weirdAlTopics[i];
+    var option = document.createElement("option");
+    option.value = topic.id;
+    option.textContent = topic.label;
+    topicSelect.appendChild(option);
+  }
+}
+
+function handleFormSubmit(event) {
+  event.preventDefault();
+  var selectedId = topicSelect.value;
+
+  if (!selectedId) {
+    showStatusMessage("Please choose a Weird Al topic first.");
+    return;
+  }
+
+  showStatusMessage("You chose: " + selectedId + ". (API not connected yet.)");
+}
+
+function handleRandomClick() {
+  var randomIndex = Math.floor(Math.random() * weirdAlTopics.length);
+  var topic = weirdAlTopics[randomIndex];
+  topicSelect.value = topic.id;
+  showStatusMessage("Random topic: " + topic.label + ". (API not connected yet.)");
+}
+
+function showStatusMessage(messageText) {
+  resultSection.innerHTML = "";
+  var message = document.createElement("p");
+  message.className = "status-message";
+  message.textContent = messageText;
+  resultSection.appendChild(message);
 }
 
 init();
