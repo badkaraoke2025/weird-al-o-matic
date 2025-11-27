@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weird-Al-O-Matic</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>Weird-Al-O-Matic</h1>
+      <p class="tagline">A small Weird Al fact finder.</p>
+    </header>
+
+    <section class="controls">
+      <form id="topic-form">
+        <label for="topic-select">Pick a Weird Al topic:</label>
+        <select id="topic-select"></select>
+        <button type="submit" id="search-button">Show Weird Al Fact</button>
+      </form>
+
+      <button type="button" id="random-button" class="random-button">
+        Random Weird Al Fact
+      </button>
+
+      <p class="hint">This app only answers Weird Al questions from a fixed list.</p>
+    </section>
+
+    <section id="result" class="result"></section>
+
+    <footer class="page-footer">
+      <p>Data from the Wikipedia REST API summary endpoint.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
