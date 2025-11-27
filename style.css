@@ -48,3 +48,9 @@ body {
   border-radius: 6px;
   font-size: 14px;
 }
+
+
+.status-message--error {
+  border-color: #ff9900;
+  color: #994400;
+}

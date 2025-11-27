@@ -43,6 +43,7 @@ function populateTopicOptions() {
 
 function handleFormSubmit(event) {
   event.preventDefault();
+
   var selectedId = topicSelect.value;
 
   if (!selectedId) {
@@ -50,21 +51,58 @@ function handleFormSubmit(event) {
     return;
   }
 
-  showStatusMessage("You chose: " + selectedId + ". (API not connected yet.)");
+  fetchWeirdAlSummary(selectedId);
 }
 
 function handleRandomClick() {
   var randomIndex = Math.floor(Math.random() * weirdAlTopics.length);
   var topic = weirdAlTopics[randomIndex];
+
   topicSelect.value = topic.id;
-  showStatusMessage("Random topic: " + topic.label + ". (API not connected yet.)");
+  fetchWeirdAlSummary(topic.id);
+}
+
+function fetchWeirdAlSummary(pageTitle) {
+  var url = WIKI_BASE_URL + pageTitle;
+
+  showStatusMessage("Loading Weird Al fact...");
+
+  fetch(url)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Network error");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      resultSection.innerHTML = "";
+      var p = document.createElement("p");
+      p.className = "status-message";
+      p.textContent = data.title + ": " + data.extract;
+      resultSection.appendChild(p);
+    })
+    .catch(function () {
+      showErrorMessage("Sorry, there was a problem loading this Weird Al fact.");
+    });
 }
 
 function showStatusMessage(messageText) {
   resultSection.innerHTML = "";
+
   var message = document.createElement("p");
   message.className = "status-message";
   message.textContent = messageText;
+
+  resultSection.appendChild(message);
+}
+
+function showErrorMessage(messageText) {
+  resultSection.innerHTML = "";
+
+  var message = document.createElement("p");
+  message.className = "status-message status-message--error";
+  message.textContent = messageText;
+
   resultSection.appendChild(message);
 }
 
