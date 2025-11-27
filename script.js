@@ -75,15 +75,65 @@ function fetchWeirdAlSummary(pageTitle) {
       return response.json();
     })
     .then(function (data) {
-      resultSection.innerHTML = "";
-      var p = document.createElement("p");
-      p.className = "status-message";
-      p.textContent = data.title + ": " + data.extract;
-      resultSection.appendChild(p);
+      renderFactCard(data);
     })
     .catch(function () {
       showErrorMessage("Sorry, there was a problem loading this Weird Al fact.");
     });
+}
+
+function renderFactCard(data) {
+  resultSection.innerHTML = "";
+
+  var card = document.createElement("article");
+  card.className = "fact-card";
+
+  var imageWrapper = document.createElement("div");
+  var imageElement = document.createElement("img");
+
+  if (data.thumbnail && data.thumbnail.source) {
+    imageElement.src = data.thumbnail.source;
+    imageElement.alt = data.title + " thumbnail image";
+  } else {
+    imageElement.alt = "No image available";
+    imageElement.style.backgroundColor = "#dddddd";
+    imageElement.style.height = "120px";
+  }
+
+  imageWrapper.appendChild(imageElement);
+  card.appendChild(imageWrapper);
+
+  var textWrapper = document.createElement("div");
+
+  var titleElement = document.createElement("h2");
+  titleElement.textContent = data.title;
+  textWrapper.appendChild(titleElement);
+
+  if (data.description) {
+    var descriptionElement = document.createElement("p");
+    descriptionElement.className = "description";
+    descriptionElement.textContent = data.description;
+    textWrapper.appendChild(descriptionElement);
+  }
+
+  if (data.extract) {
+    var extractElement = document.createElement("p");
+    extractElement.className = "extract";
+    extractElement.textContent = data.extract;
+    textWrapper.appendChild(extractElement);
+  }
+
+  if (data.content_urls && data.content_urls.desktop && data.content_urls.desktop.page) {
+    var linkElement = document.createElement("a");
+    linkElement.href = data.content_urls.desktop.page;
+    linkElement.target = "_blank";
+    linkElement.rel = "noopener noreferrer";
+    linkElement.textContent = "View full article on Wikipedia";
+    textWrapper.appendChild(linkElement);
+  }
+
+  card.appendChild(textWrapper);
+  resultSection.appendChild(card);
 }
 
 function showStatusMessage(messageText) {
